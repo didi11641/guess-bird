@@ -1,0 +1,33 @@
+.bird-sound-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.region {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.answer-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.hints {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.buttons {
+  flex-direction: row;
+}
+
+div button {
+  margin-left: 10px;
+  margin-right: 10px;
+}

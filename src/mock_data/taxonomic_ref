@@ -1,0 +1,24 @@
+https://{{serverName}}/{{contextRoot}}/ref/taxonomy/ebird?species=whiwag&locale=zh-CN&fmt=json
+
+[
+    {
+        "sciName": "Motacilla alba",
+        "comName": "白鶺鴒",
+        "speciesCode": "whiwag",
+        "category": "species",
+        "taxonOrder": 31202.0,
+        "bandingCodes": [
+            "WHWA"
+        ],
+        "comNameCodes": [
+            "PWWA"
+        ],
+        "sciNameCodes": [
+            "MOAL"
+        ],
+        "order": "Passeriformes",
+        "familyCode": "motaci1",
+        "familyComName": "Wagtails and Pipits",
+        "familySciName": "Motacillidae"
+    }
+]
