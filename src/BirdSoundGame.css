@@ -1,33 +1,88 @@
+.bird-sound-game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .bird-sound-game {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  gap: 24px;
+  justify-content: center;
 }
 
-.region {
-  font-size: 20px;
-  font-weight: bold;
+.game-main {
+  width: 700px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.answer-section {
+.game-main > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.game-main .region {
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: #f7f8fa;
+  border-radius: 4px;
+}
+
+.game-main .answer-section {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.game-main .buttons {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
+  justify-content: center;
+  margin: 16px 0;
 }
 
-.hints {
+.game-main .hints {
+  text-align: center;
+  margin-top: 16px;
+  padding: 8px;
+  background: #f7f8fa;
+  border-radius: 4px;
+}
+
+.game-sidebar {
+  width: 360px;
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.audio-player {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.answer-input {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.options-container {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  flex-direction: column;
+  margin: 20px auto;
+  max-width: 600px;
 }
 
-.buttons {
-  flex-direction: row;
-}
-
-div button {
-  margin-left: 10px;
-  margin-right: 10px;
+.game-main .tip-button {
+  display: block;
+  margin: 16px auto;
 }

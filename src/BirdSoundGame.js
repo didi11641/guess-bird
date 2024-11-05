@@ -74,7 +74,7 @@ const BirdSoundGame = ({settings}) => {
       total: prev.total + 1,
       history: [...prev.history, {
         bird: currentBird,
-        userAnswer: '跳过',
+        userAnswer: '���过',
         isCorrect: false,
         timestamp: new Date().toLocaleString()
       }]
@@ -173,50 +173,68 @@ const BirdSoundGame = ({settings}) => {
   }, [birdObservations])
 
 return (
-  <div className="bird-sound-game">
-    {birdObservations.length === 0 && <Typography.Text>No birds observed in this region.</Typography.Text>}
-    {birdObservations.length > 0 &&
-      <div className="region">
-        记录地点: {birdObservations[speciesIndex]['locName']}
+  <div className="bird-sound-game-container">
+    <div className="bird-sound-game">
+      <div className="game-main">
+        {birdObservations.length === 0 && 
+          <Typography.Text>No birds observed in this region.</Typography.Text>
+        }
+        
+        {birdObservations.length > 0 && (
+          <>
+            <div className="region">
+              记录地点: {birdObservations[speciesIndex]['locName']}
+            </div>
+            
+            {'numRecordings' in audioJSON && audioIndex >= 0 && audioIndex < audioJSON['numRecordings'] &&
+              <div className="region">
+                记录类型: {audioJSON['recordings'][audioIndex]['type']}
+              </div>
+            }
+
+            <AudioPlayer src={audioUrl} />
+
+            <AnswerInput 
+              type={answerType} 
+              birdObservations={answerOptions} 
+              onInputChange={onInputChange} 
+            />
+
+            <div className="answer-section">
+              <Radio.Group
+                type="button"
+                value={answerType}
+                onChange={setAnswerType}
+              >
+                <Radio value="input">直接输入</Radio>
+                <Radio value="select">选项选择</Radio>
+              </Radio.Group>
+            </div>
+
+            <Space className="buttons">
+              <Button type="primary" onClick={handleSubmit}>提交</Button>
+              <Button onClick={skipSpecies}>跳过这题</Button>
+              <Button onClick={switchAudio}>换个录音</Button>
+            </Space>
+
+            <Button className="tip-button" type="dashed" onClick={showTips}>
+              Give me some tips~
+            </Button>
+            <div className="hints">
+              {tips.map((item, index) => (
+                <Typography.Text key={index}>{item}</Typography.Text>
+              ))}
+            </div>
+          </>
+        )}
+        
+        {birdObservations === null && <NoData/>}
       </div>
-    }
-    {'numRecordings' in audioJSON && audioIndex >= 0 && audioIndex < audioJSON['numRecordings'] &&
-      <div className="region">
-        记录类型: {audioJSON['recordings'][audioIndex]['type']}
+
+      <div className="game-sidebar">
+        <ScoreBoard score={score} />
       </div>
-    }
-    {birdObservations === null && <NoData/>}
-
-    <AudioPlayer src={audioUrl} />
-
-    <AnswerInput type={answerType} birdObservations={answerOptions} onInputChange={onInputChange} />
-    <div className="answer-section">
-      <Radio.Group
-        type="button"
-        value={answerType}
-        onChange={setAnswerType}
-      >
-        <Radio value="input">直接输入</Radio>
-        <Radio value="select">选项选择</Radio>
-      </Radio.Group>
     </div>
-
-    <Space className="buttons">
-      <Button type="primary" onClick={handleSubmit}>提交</Button>
-      <Button onClick={skipSpecies}>跳过这题</Button>
-      <Button onClick={switchAudio}>换个录音</Button>
-    </Space>
-
-    <Button type="dashed" onClick={showTips}>Give me some tips~</Button>
-    <div className="hints">
-      {tips.map((item, index) => (
-        <Typography.Text key={index}>{item}</Typography.Text>
-      ))}
-    </div>
-
-    <ScoreBoard 
-      score={score} 
-    />
   </div>
 );
 };
