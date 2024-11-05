@@ -19,8 +19,8 @@ const ScoreBoard = ({ score }) => {
         </div>
         
         <Typography.Title heading={6}>最近记录</Typography.Title>
-        <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-          {score.history.slice(-5).reverse().map((record, index) => (
+        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          {score.history.slice(-50).reverse().map((record, index) => (
             <div key={index} style={{ 
               padding: '8px', 
               marginBottom: '4px',
@@ -28,7 +28,11 @@ const ScoreBoard = ({ score }) => {
               borderRadius: '4px'
             }}>
               <Typography.Text>
-                {record.bird} - {record.userAnswer} 
+                {record.isCorrect ? (
+                  record.bird
+                ) : (
+                  `${record.bird} - ${record.userAnswer}`
+                )}
                 {record.isCorrect ? ' ✓' : ' ✗'}
               </Typography.Text>
             </div>

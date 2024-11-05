@@ -29,6 +29,8 @@ const BirdSoundGame = ({settings}) => {
     history: []
   });
 
+  const [tempHistory, setTempHistory] = useState([]);
+
   const getOptionNumByDifficulty = (difficulty) => {
     // TODO: Calculate similarity.
     if (difficulty === 'easy') {
@@ -68,16 +70,18 @@ const BirdSoundGame = ({settings}) => {
   const skipSpecies = () => {
     const currentBird = birdObservations[speciesIndex]['comName'];
     
-    // 更新分数（跳过算错误）
+    // 将跳过的记录添加到临时历史
+    setTempHistory(prev => [...prev, {
+      bird: currentBird,
+      userAnswer: '跳过',
+      isCorrect: false,
+      timestamp: new Date().toLocaleString()
+    }]);
+
+    // 只更新总数
     setScore(prev => ({
       ...prev,
-      total: prev.total + 1,
-      history: [...prev.history, {
-        bird: currentBird,
-        userAnswer: '���过',
-        isCorrect: false,
-        timestamp: new Date().toLocaleString()
-      }]
+      total: prev.total + 1
     }));
 
     const msg = `AH~ 好遗憾, 答案其实是...  ${currentBird}!\n下一题?`;
@@ -90,19 +94,25 @@ const BirdSoundGame = ({settings}) => {
     const isCorrect = inputRef.current === birdObservations[speciesIndex]['comName'];
     const currentBird = birdObservations[speciesIndex]['comName'];
     
-    // 更新分数
-    setScore(prev => ({
-      correct: prev.correct + (isCorrect ? 1 : 0),
-      total: prev.total + 1,
-      history: [...prev.history, {
-        bird: currentBird,
-        userAnswer: inputRef.current,
-        isCorrect: isCorrect,
-        timestamp: new Date().toLocaleString()
-      }]
-    }));
-
     if (isCorrect) {
+      // 答对时，将临时历史和当前答对的记录一起添加到正式历史中
+      setScore(prev => ({
+        correct: prev.correct + 1,
+        total: prev.total + 1,
+        history: [
+          ...prev.history,
+          ...tempHistory,
+          {
+            bird: currentBird,
+            userAnswer: inputRef.current,
+            isCorrect: true,
+            timestamp: new Date().toLocaleString()
+          }
+        ]
+      }));
+      // 清空临时历史
+      setTempHistory([]);
+
       Message.success({
         icon: <IconFont type='icon-success' />,
         content: 'Correct! Next~',
@@ -110,6 +120,20 @@ const BirdSoundGame = ({settings}) => {
       setTips(['']);
       switchSpecies();
     } else {
+      // 答错时，只添加到临时历史
+      setTempHistory(prev => [...prev, {
+        bird: currentBird,
+        userAnswer: inputRef.current,
+        isCorrect: false,
+        timestamp: new Date().toLocaleString()
+      }]);
+      
+      // 更新总数
+      setScore(prev => ({
+        ...prev,
+        total: prev.total + 1
+      }));
+
       Message.error({
         icon: <IconFont type='icon-error' />,
         content: 'No~ Try again.',
