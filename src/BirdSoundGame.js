@@ -3,6 +3,7 @@ import AudioPlayer from './AudioPlayer';
 import AnswerInput from './AnswerInput';
 import NoData from './components/NoData';
 import { Message, Icon, Button, Radio, Space, Typography } from '@arco-design/web-react';
+import ScoreBoard from './components/ScoreBoard';
 
 import { getRandomElements } from './utils';
 import { fetchNearbyBirdObservations, fetchAudioRecordings } from './netUtils';
@@ -21,6 +22,12 @@ const BirdSoundGame = ({settings}) => {
   const [audioJSON, setAudioJSON] = useState({});
   const [audioIndex, setAudioIndex] = useState(-1);
   const inputRef = useRef('');
+
+  const [score, setScore] = useState({
+    correct: 0,
+    total: 0,
+    history: []
+  });
 
   const getOptionNumByDifficulty = (difficulty) => {
     // TODO: Calculate similarity.
@@ -59,14 +66,43 @@ const BirdSoundGame = ({settings}) => {
   };
 
   const skipSpecies = () => {
-    const msg = `AH~ 好遗憾, 答案其实是...  ${birdObservations[speciesIndex]['comName']}!\n下一题?`;
+    const currentBird = birdObservations[speciesIndex]['comName'];
+    
+    // 更新分数（跳过算错误）
+    setScore(prev => ({
+      ...prev,
+      total: prev.total + 1,
+      history: [...prev.history, {
+        bird: currentBird,
+        userAnswer: '跳过',
+        isCorrect: false,
+        timestamp: new Date().toLocaleString()
+      }]
+    }));
+
+    const msg = `AH~ 好遗憾, 答案其实是...  ${currentBird}!\n下一题?`;
     if (window.confirm(msg)) {
       switchSpecies();
     }
   };
 
   const handleSubmit = () => {
-    if (inputRef.current == birdObservations[speciesIndex]['comName']) {
+    const isCorrect = inputRef.current === birdObservations[speciesIndex]['comName'];
+    const currentBird = birdObservations[speciesIndex]['comName'];
+    
+    // 更新分数
+    setScore(prev => ({
+      correct: prev.correct + (isCorrect ? 1 : 0),
+      total: prev.total + 1,
+      history: [...prev.history, {
+        bird: currentBird,
+        userAnswer: inputRef.current,
+        isCorrect: isCorrect,
+        timestamp: new Date().toLocaleString()
+      }]
+    }));
+
+    if (isCorrect) {
       Message.success({
         icon: <IconFont type='icon-success' />,
         content: 'Correct! Next~',
@@ -177,6 +213,10 @@ return (
         <Typography.Text key={index}>{item}</Typography.Text>
       ))}
     </div>
+
+    <ScoreBoard 
+      score={score} 
+    />
   </div>
 );
 };
