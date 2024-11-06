@@ -58,6 +58,10 @@ const BirdSoundGame = ({settings}) => {
 
   const onInputChange = (val) => {
     inputRef.current = val;
+    // 当答题模式为选择时，自动提交答案
+    if (answerType === 'select') {
+      handleSubmit();
+    }
   };
 
   const switchSpecies = () => {
@@ -169,18 +173,26 @@ const BirdSoundGame = ({settings}) => {
     if (isNaN(audioIndex) || audioIndex < 0 || !('numRecordings' in audioJSON)) {
       return;
     }
-    const url = audioJSON['recordings'][audioIndex]['file']
+    const recording = audioJSON['recordings'][audioIndex];
+    console.log('Current recording:', recording);
+    
+    const url = recording['file'];
+    if (!url) {
+      console.log('Empty URL found for recording:', recording);
+      return;
+    }
+    
     console.log(`Audio recording: ${url}`);
     try {
-      const rewrite_url = '/audio' + new URL(url).pathname
+      const rewrite_url = '/audio' + new URL(url).pathname;
       console.log(`rewrite to: ${rewrite_url}`);
-      setAudiotUrl(rewrite_url)
+      setAudiotUrl(rewrite_url);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Message.error({
         icon: <IconFont type='icon-error' />,
         content: '获取录音失败, 换个试试吧~',
-      })
+      });
     }
   }, [audioIndex]);
 
@@ -256,7 +268,10 @@ return (
             </div>
 
             <Space className="buttons">
-              <Button type="primary" onClick={handleSubmit}>提交</Button>
+              {/* 仅在输入模式下显示提交按钮 */}
+              {answerType === 'input' && (
+                <Button type="primary" onClick={handleSubmit}>提交</Button>
+              )}
               <Button onClick={skipSpecies}>跳过这题</Button>
               <Button onClick={switchAudio}>换个录音</Button>
             </Space>

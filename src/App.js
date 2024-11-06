@@ -15,7 +15,7 @@ function App() {
     source: 'nearby_obs',
     loc: [30, 120],
     locId: 'L7204750',
-    difficulty: DifficultyLevels.EASY,
+    difficulty: DifficultyLevels.MEDIUM,
     // 其他设置...
   });
 
