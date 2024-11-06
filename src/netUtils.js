@@ -30,3 +30,21 @@ export const fetchAudioRecordings = async (sciName) => {
     return null;
   }
 };
+
+export const fetchHotspotName = async (locId) => {
+  try {
+    const response = await fetch(
+      `https://api.ebird.org/v2/ref/hotspot/info/${locId}`,
+      {
+        headers: {
+          'x-ebirdapitoken': '674ukrope95t'
+        }
+      }
+    );
+    const data = await response.json();
+    return data.name;
+  } catch (error) {
+    console.error('Error fetching hotspot name:', error);
+    return null;
+  }
+};

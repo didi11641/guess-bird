@@ -1,11 +1,43 @@
-import { useState } from 'react';
-import { Radio, Input, Space } from '@arco-design/web-react';
+import { useState, useEffect } from 'react';
+import { Radio, Input, Space, Link, Typography } from '@arco-design/web-react';
 import { DifficultyLevels } from './difficulty';
+import { fetchHotspotName } from './netUtils';
+
 const RadioGroup = Radio.Group;
+const { Text } = Typography;
 
 function HotspotSelector({ selectedHotspot, onHotspotChange }) {
+  const [hotspotName, setHotspotName] = useState('');
+
+  useEffect(() => {
+    const getHotspotName = async () => {
+      if (selectedHotspot) {
+        const name = await fetchHotspotName(selectedHotspot);
+        setHotspotName(name || '');
+      }
+    };
+    getHotspotName();
+  }, [selectedHotspot]);
+
   return (
-    <Input value={selectedHotspot} onChange={onHotspotChange}></Input>
+    <Space direction='vertical'>
+      <Link href="https://ebird.org/hotspots" target="_blank">
+        点击此处查找兴趣点代号
+      </Link>
+      <Text type="secondary">
+        请在 eBird 热点地图中选择热点，并从热点详情页面的 URL 中复制热点代号（例如：L2345678）
+      </Text>
+      <Input 
+        value={selectedHotspot} 
+        onChange={onHotspotChange}
+        placeholder="请输入热点代号"
+      />
+      {hotspotName && (
+        <Text type="success">
+          已选择热点：{hotspotName}
+        </Text>
+      )}
+    </Space>
   );
 }
 
