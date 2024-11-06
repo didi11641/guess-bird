@@ -1,88 +1,109 @@
 .bird-sound-game-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .bird-sound-game {
   display: flex;
-  gap: 24px;
-  justify-content: center;
+  width: 100%;
+  gap: 20px;
+  /* 默认为手机端纵向布局 */
+  flex-direction: column;
 }
 
 .game-main {
-  width: 700px;
-  background: #fff;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.game-main > * {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.game-main .region {
-  text-align: center;
-  margin-bottom: 16px;
-  padding: 8px;
-  background: #f7f8fa;
-  border-radius: 4px;
-}
-
-.game-main .answer-section {
-  text-align: center;
-  margin: 16px 0;
-}
-
-.game-main .buttons {
-  display: flex;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.game-main .hints {
-  text-align: center;
-  margin-top: 16px;
-  padding: 8px;
-  background: #f7f8fa;
-  border-radius: 4px;
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
 .game-sidebar {
-  width: 360px;
-  position: sticky;
-  top: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+/* 按钮组样式 */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.answer-section {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .audio-player {
   width: 100%;
-  max-width: 600px;
-  margin: 20px auto;
+  max-width: 100%;
+  margin: 15px auto;
+}
+
+.hints {
+  margin: 10px 0;
   text-align: center;
 }
 
-.answer-input {
-  width: 100%;
-  max-width: 600px;
-  margin: 20px auto;
+.region {
+  word-break: break-word;
+  margin: 15px 0;
   text-align: center;
 }
 
-.options-container {
+/* 新增样式 */
+.answer-input-container {
   display: flex;
-  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
   justify-content: center;
-  gap: 10px;
-  margin: 20px auto;
-  max-width: 600px;
 }
 
-.game-main .tip-button {
-  display: block;
-  margin: 16px auto;
+/* PC端布局 (屏幕宽度大于 768px) */
+@media screen and (min-width: 768px) {
+  .bird-sound-game-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .bird-sound-game {
+    flex-direction: row; /* PC端改为横向布局 */
+  }
+
+  .game-main {
+    flex: 1;  /* 主内容区域占据剩余空间 */
+    max-width: 70%;
+  }
+
+  .game-sidebar {
+    width: 300px; /* 固定侧边栏宽度 */
+  }
+
+  .buttons {
+    justify-content: center; /* PC端按钮左对齐 */
+  }
+
+  .region {
+    text-align: center; /* 改为始终居中 */
+  }
+}
+
+/* 平板布局 (介于手机和PC之间) */
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  .bird-sound-game-container {
+    padding: 15px;
+  }
+
+  .buttons {
+    justify-content: flex-start;
+  }
 }

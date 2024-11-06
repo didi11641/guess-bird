@@ -52,7 +52,7 @@ const BirdSoundGame = ({settings}) => {
   const showTips = () => {
     const recording = audioJSON['recordings'][audioIndex];
     setTips([
-      `给个英文名吧: ${recording['en']}`,
+      `${recording['en']}`,
     ]);
   };
 
@@ -71,6 +71,7 @@ const BirdSoundGame = ({settings}) => {
     const index = Math.floor(Math.random() * birdObservations.length);
     setSpeciesIndex(index);
     setAudioIndex(-1);
+    setTips([]);
     console.log(`Switch species to ${birdObservations[index]['comName']} index=${index}`);
   };
 
@@ -233,32 +234,42 @@ return (
     <div className="bird-sound-game">
       <div className="game-main">
         {birdObservations.length === 0 && 
-          <Typography.Text>No birds observed in this region.</Typography.Text>
+          <Typography.Text>该地区暂无鸟类记录</Typography.Text>
         }
         
         {birdObservations.length > 0 && (
           <>
             <div className="region">
-              记录地点: {birdObservations[speciesIndex]['locName']}
+              <Typography.Title heading={5} style={{fontSize: '16px'}}>
+                记录地点: {birdObservations[speciesIndex]['locName']}
+              </Typography.Title>
             </div>
             
             {'numRecordings' in audioJSON && audioIndex >= 0 && audioIndex < audioJSON['numRecordings'] &&
               <div className="region">
-                记录类型: {audioJSON['recordings'][audioIndex]['type']}
+                <Typography.Title heading={5} style={{fontSize: '16px'}}>
+                  记录类型: {audioJSON['recordings'][audioIndex]['type']}
+                </Typography.Title>
               </div>
             }
 
             <AudioPlayer src={audioUrl} />
 
-            <AnswerInput 
-              type={answerType} 
-              birdObservations={answerOptions} 
-              onInputChange={onInputChange} 
-            />
+            <div className="answer-input-container">
+              <AnswerInput 
+                type={answerType} 
+                birdObservations={answerOptions} 
+                onInputChange={onInputChange} 
+              />
+              {answerType === 'input' && (
+                <Button size="small" type="primary" onClick={handleSubmit}>提交</Button>
+              )}
+            </div>
 
             <div className="answer-section">
               <Radio.Group
                 type="button"
+                size="small"
                 value={answerType}
                 onChange={setAnswerType}
               >
@@ -267,18 +278,12 @@ return (
               </Radio.Group>
             </div>
 
-            <Space className="buttons">
-              {/* 仅在输入模式下显示提交按钮 */}
-              {answerType === 'input' && (
-                <Button type="primary" onClick={handleSubmit}>提交</Button>
-              )}
-              <Button onClick={skipSpecies}>跳过这题</Button>
-              <Button onClick={switchAudio}>换个录音</Button>
+            <Space className="buttons" wrap>
+              <Button size="small" onClick={skipSpecies}>跳过这题</Button>
+              <Button size="small" onClick={switchAudio}>换个录音</Button>
+              <Button size="small" type="dashed" onClick={showTips}>需要提示</Button>
             </Space>
 
-            <Button className="tip-button" type="dashed" onClick={showTips}>
-              Give me some tips~
-            </Button>
             <div className="hints">
               {tips.map((item, index) => (
                 <Typography.Text key={index}>{item}</Typography.Text>
