@@ -23,10 +23,13 @@ const BirdSoundGame = ({settings}) => {
   const [audioIndex, setAudioIndex] = useState(-1);
   const inputRef = useRef('');
 
-  const [score, setScore] = useState({
-    correct: 0,
-    total: 0,
-    history: []
+  const [score, setScore] = useState(() => {
+    const savedScore = localStorage.getItem('birdQuizScore');
+    return savedScore ? JSON.parse(savedScore) : {
+      correct: 0,
+      total: 0,
+      history: []
+    };
   });
 
   const [tempHistory, setTempHistory] = useState([]);
@@ -70,7 +73,6 @@ const BirdSoundGame = ({settings}) => {
   const skipSpecies = () => {
     const currentBird = birdObservations[speciesIndex]['comName'];
     
-    // 将跳过的记录添加到临时历史
     setTempHistory(prev => [...prev, {
       bird: currentBird,
       userAnswer: '跳过',
@@ -78,11 +80,14 @@ const BirdSoundGame = ({settings}) => {
       timestamp: new Date().toLocaleString()
     }]);
 
-    // 只更新总数
-    setScore(prev => ({
-      ...prev,
-      total: prev.total + 1
-    }));
+    setScore(prev => {
+      const newScore = {
+        ...prev,
+        total: prev.total + 1
+      };
+      localStorage.setItem('birdQuizScore', JSON.stringify(newScore));
+      return newScore;
+    });
 
     const msg = `AH~ 好遗憾, 答案其实是...  ${currentBird}!\n下一题?`;
     if (window.confirm(msg)) {
@@ -95,22 +100,24 @@ const BirdSoundGame = ({settings}) => {
     const currentBird = birdObservations[speciesIndex]['comName'];
     
     if (isCorrect) {
-      // 答对时，将临时历史和当前答对的记录一起添加到正式历史中
-      setScore(prev => ({
-        correct: prev.correct + 1,
-        total: prev.total + 1,
-        history: [
-          ...prev.history,
-          ...tempHistory,
-          {
-            bird: currentBird,
-            userAnswer: inputRef.current,
-            isCorrect: true,
-            timestamp: new Date().toLocaleString()
-          }
-        ]
-      }));
-      // 清空临时历史
+      setScore(prev => {
+        const newScore = {
+          correct: prev.correct + 1,
+          total: prev.total + 1,
+          history: [
+            ...prev.history,
+            ...tempHistory,
+            {
+              bird: currentBird,
+              userAnswer: inputRef.current,
+              isCorrect: true,
+              timestamp: new Date().toLocaleString()
+            }
+          ]
+        };
+        localStorage.setItem('birdQuizScore', JSON.stringify(newScore));
+        return newScore;
+      });
       setTempHistory([]);
 
       Message.success({
@@ -120,7 +127,6 @@ const BirdSoundGame = ({settings}) => {
       setTips(['']);
       switchSpecies();
     } else {
-      // 答错时，只添加到临时历史
       setTempHistory(prev => [...prev, {
         bird: currentBird,
         userAnswer: inputRef.current,
@@ -128,11 +134,14 @@ const BirdSoundGame = ({settings}) => {
         timestamp: new Date().toLocaleString()
       }]);
       
-      // 更新总数
-      setScore(prev => ({
-        ...prev,
-        total: prev.total + 1
-      }));
+      setScore(prev => {
+        const newScore = {
+          ...prev,
+          total: prev.total + 1
+        };
+        localStorage.setItem('birdQuizScore', JSON.stringify(newScore));
+        return newScore;
+      });
 
       Message.error({
         icon: <IconFont type='icon-error' />,
@@ -196,6 +205,17 @@ const BirdSoundGame = ({settings}) => {
     switchSpecies();
   }, [birdObservations])
 
+  // 清除记录的处理函数
+  const handleClear = () => {
+    const newScore = {
+      total: 0,
+      correct: 0,
+      history: []
+    };
+    setScore(newScore);
+    localStorage.setItem('birdQuizScore', JSON.stringify(newScore));
+  };
+
 return (
   <div className="bird-sound-game-container">
     <div className="bird-sound-game">
@@ -256,7 +276,7 @@ return (
       </div>
 
       <div className="game-sidebar">
-        <ScoreBoard score={score} />
+        <ScoreBoard score={score} onClear={handleClear} />
       </div>
     </div>
   </div>

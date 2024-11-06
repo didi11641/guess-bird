@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, Space } from '@arco-design/web-react';
+import { Typography, Space, Button } from '@arco-design/web-react';
 
-const ScoreBoard = ({ score }) => {
+const ScoreBoard = ({ score, onClear }) => {
   return (
     <div className="score-board" style={{ 
       marginTop: '20px', 
@@ -9,7 +9,16 @@ const ScoreBoard = ({ score }) => {
       border: '1px solid #e5e6eb', 
       borderRadius: '4px' 
     }}>
-      <Typography.Title heading={6}>得分统计</Typography.Title>
+      <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <Typography.Title heading={6} style={{ margin: 0 }}>得分统计</Typography.Title>
+        <Button 
+          type="secondary" 
+          size="small"
+          onClick={onClear}
+        >
+          清除记录
+        </Button>
+      </Space>
       <Space direction="vertical" style={{ width: '100%' }}>
         <div className="score-summary">
           <Typography.Text>
