@@ -8,12 +8,24 @@ const { Text } = Typography;
 
 function HotspotSelector({ selectedHotspot, onHotspotChange }) {
   const [hotspotName, setHotspotName] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const getHotspotName = async () => {
       if (selectedHotspot) {
-        const name = await fetchHotspotName(selectedHotspot);
-        setHotspotName(name || '');
+        try {
+          const name = await fetchHotspotName(selectedHotspot);
+          if (name) {
+            setHotspotName(name);
+            setError('');
+          } else {
+            setHotspotName('');
+            setError('未找到该热点，请检查热点代号是否正确');
+          }
+        } catch (err) {
+          setHotspotName('');
+          setError('获取热点信息失败，请稍后重试');
+        }
       }
     };
     getHotspotName();
@@ -32,6 +44,11 @@ function HotspotSelector({ selectedHotspot, onHotspotChange }) {
         onChange={onHotspotChange}
         placeholder="请输入热点代号"
       />
+      {error && (
+        <Text type="error">
+          {error}
+        </Text>
+      )}
       {hotspotName && (
         <Text type="success">
           已选择热点：{hotspotName}

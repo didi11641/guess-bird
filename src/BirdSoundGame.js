@@ -281,7 +281,7 @@ return (
             <Space className="buttons" wrap>
               <Button size="small" onClick={skipSpecies}>跳过这题</Button>
               <Button size="small" onClick={switchAudio}>换个录音</Button>
-              <Button size="small" type="dashed" onClick={showTips}>需要提示</Button>
+              <Button size="small" type="dashed" onClick={showTips}>提示</Button>
             </Space>
 
             <div className="hints">
