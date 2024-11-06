@@ -1,4 +1,4 @@
-https://{{serverName}}/{{contextRoot}}/ref/taxonomy/ebird?species=whiwag&locale=zh-CN&fmt=json
+// https://{{serverName}}/{{contextRoot}}/ref/taxonomy/ebird?species=whiwag&locale=zh-CN&fmt=json
 
 [
     {

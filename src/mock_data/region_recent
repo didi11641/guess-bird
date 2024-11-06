@@ -1,6 +1,6 @@
-https://api.ebird.org/v2/data/obs/{{regionCode}}/recent?sppLocale=zh_SIM&back=14
+// https://api.ebird.org/v2/data/obs/{{regionCode}}/recent?sppLocale=zh_SIM&back=14
 
-https://api.ebird.org/v2/data/obs/geo/recent?sppLocale=zh_SIM&lat={{lat}}&lng={{lng}}
+// https://api.ebird.org/v2/data/obs/geo/recent?sppLocale=zh_SIM&lat={{lat}}&lng={{lng}}
 
 [
     {
