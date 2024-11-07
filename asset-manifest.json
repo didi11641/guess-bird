@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/guess-bird/static/css/main.70b46588.css",
-    "main.js": "/guess-bird/static/js/main.38d65ad5.js",
+    "main.js": "/guess-bird/static/js/main.200fc4be.js",
     "static/js/453.e192972d.chunk.js": "/guess-bird/static/js/453.e192972d.chunk.js",
     "index.html": "/guess-bird/index.html",
     "main.70b46588.css.map": "/guess-bird/static/css/main.70b46588.css.map",
-    "main.38d65ad5.js.map": "/guess-bird/static/js/main.38d65ad5.js.map",
+    "main.200fc4be.js.map": "/guess-bird/static/js/main.200fc4be.js.map",
     "453.e192972d.chunk.js.map": "/guess-bird/static/js/453.e192972d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.70b46588.css",
-    "static/js/main.38d65ad5.js"
+    "static/js/main.200fc4be.js"
   ]
 }
