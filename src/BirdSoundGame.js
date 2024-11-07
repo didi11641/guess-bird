@@ -185,9 +185,10 @@ const BirdSoundGame = ({settings}) => {
     
     console.log(`Audio recording: ${url}`);
     try {
-      const rewrite_url = '/audio' + new URL(url).pathname;
-      console.log(`rewrite to: ${rewrite_url}`);
-      setAudiotUrl(rewrite_url);
+      // const rewrite_url = '/audio' + new URL(url).pathname;
+      // console.log(`rewrite to: ${rewrite_url}`);
+      // setAudiotUrl(rewrite_url);
+      setAudiotUrl(url);
     } catch (error) {
       console.error(error);
       Message.error({
