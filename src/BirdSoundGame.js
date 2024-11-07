@@ -6,7 +6,7 @@ import { Message, Icon, Button, Radio, Space, Typography } from '@arco-design/we
 import ScoreBoard from './components/ScoreBoard';
 
 import { getRandomElements } from './utils';
-import { fetchNearbyBirdObservations, fetchAudioRecordings } from './netUtils';
+import { fetchNearbyBirdObservations, fetchAudioRecordings, getProxiedAudioUrl } from './netUtils';
 import './BirdSoundGame.css';
 const IconFont = Icon.addFromIconFontCn({
   src: '//at.alicdn.com/t/font_180975_26f1p759rvn.js',
@@ -185,10 +185,9 @@ const BirdSoundGame = ({settings}) => {
     
     console.log(`Audio recording: ${url}`);
     try {
-      // const rewrite_url = '/audio' + new URL(url).pathname;
-      // console.log(`rewrite to: ${rewrite_url}`);
-      // setAudiotUrl(rewrite_url);
-      setAudiotUrl(url);
+      const proxyUrl = getProxiedAudioUrl(url);
+      console.log(`Proxied URL: ${proxyUrl}`);
+      setAudiotUrl(proxyUrl);
     } catch (error) {
       console.error(error);
       Message.error({
