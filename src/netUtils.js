@@ -49,16 +49,13 @@ export const fetchHotspotName = async (locId) => {
   }
 };
 
-const AUDIO_PROXY_URL = process.env.NODE_ENV === 'development' 
-  ? '/audio' 
-  : 'https://aged-cell-db3e.didi11641.workers.dev/';
+const AUDIO_PROXY_URL = 'https://api.codetabs.com/v1/proxy/?quest=';
 
 export const getProxiedAudioUrl = (originalUrl) => {
-  if (process.env.NODE_ENV === 'development') {
-    // 开发环境使用本地代理
-    return '/audio' + new URL(originalUrl).pathname;
-  } else {
-    // 生产环境使用 Cloudflare Workers
-    return `${AUDIO_PROXY_URL}?url=${encodeURIComponent(originalUrl)}`;
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   // 开发环境使用本地代理
+  //   return '/audio' + new URL(originalUrl).pathname;
+  // } else {
+    return `${AUDIO_PROXY_URL}${encodeURIComponent(originalUrl)}`;
+  // }
 };
