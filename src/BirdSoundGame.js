@@ -34,6 +34,8 @@ const BirdSoundGame = ({settings}) => {
 
   const [tempHistory, setTempHistory] = useState([]);
 
+  const [isSkipping, setIsSkipping] = useState(false);
+
   const getOptionNumByDifficulty = (difficulty) => {
     // TODO: Calculate similarity.
     if (difficulty === 'easy') {
@@ -76,6 +78,8 @@ const BirdSoundGame = ({settings}) => {
   };
 
   const skipSpecies = () => {
+    if (isSkipping) return;
+    
     const currentBird = birdObservations[speciesIndex]['comName'];
     
     setTempHistory(prev => [...prev, {
@@ -94,10 +98,7 @@ const BirdSoundGame = ({settings}) => {
       return newScore;
     });
 
-    const msg = `AH~ 好遗憾, 答案其实是...  ${currentBird}!\n下一题?`;
-    if (window.confirm(msg)) {
-      switchSpecies();
-    }
+    switchSpecies();
   };
 
   const handleSubmit = () => {
@@ -179,7 +180,22 @@ const BirdSoundGame = ({settings}) => {
     
     const url = recording['file'];
     if (!url) {
-      console.log('Empty URL found for recording:', recording);
+      if (isSkipping) return;
+      
+      setIsSkipping(true);
+      
+      // 显示提示信息
+      Message.warning({
+        icon: <IconFont type='icon-warning' />,
+        content: `(${birdObservations[speciesIndex]['comName']})可能是敏感鸟种，不提供声音记录，3秒后自动跳过`,
+      });
+      
+      // 3秒后自动跳过
+      setTimeout(() => {
+        skipSpecies();
+        setIsSkipping(false);
+      }, 3000);
+      
       return;
     }
     
