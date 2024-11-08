@@ -10,13 +10,13 @@ const ScoreBoard = ({ score, onClear }) => {
       borderRadius: '4px' 
     }}>
       <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <Typography.Title heading={6} style={{ margin: 0 }}>得分统计</Typography.Title>
+        <Typography.Title heading={6} style={{ margin: 0 }}>ScoreBoard</Typography.Title>
         <Button 
           type="secondary" 
           size="small"
           onClick={onClear}
         >
-          清除记录
+          Clear
         </Button>
       </Space>
       <Space direction="vertical" style={{ width: '100%' }}>
@@ -27,7 +27,7 @@ const ScoreBoard = ({ score, onClear }) => {
           </Typography.Text>
         </div>
         
-        <Typography.Title heading={6}>最近记录</Typography.Title>
+        <Typography.Title heading={6}>Recent</Typography.Title>
         <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
           {score.history.slice(-50).reverse().map((record, index) => (
             <div key={index} style={{ 
@@ -40,7 +40,7 @@ const ScoreBoard = ({ score, onClear }) => {
                 {record.isCorrect ? (
                   record.bird
                 ) : (
-                  `${record.bird} - ${record.userAnswer}`
+                  `\u00A0\u00A0\u00A0\u00A0-- ${record.userAnswer}`
                 )}
                 {record.isCorrect ? ' ✓' : ' ✗'}
               </Typography.Text>

@@ -162,10 +162,22 @@ const BirdSoundGame = ({settings}) => {
     }
     console.log('Switch audio.');
     const num = audioJSON['numRecordings']
-    // At most 30 records
+    // At most 10 records
     const max = Math.min(num, 10);
-    setAudioIndex((audioIndex + 1) % max);
+    // 随机选择一段录音
+    const randomIndex = Math.floor(Math.random() * max);
+    setAudioIndex(randomIndex);
   };
+
+  useEffect(() => {
+    if (speciesIndex >= 0 && birdObservations.length > 0) {
+      const record = birdObservations[speciesIndex];
+      fetchAudioRecordings(record['sciName']).then(data => {
+        setAudioJSON(data);
+        // 不需要在这里调用 switchAudio，因为 audioJSON 变化会触发另一个 useEffect
+      });
+    }
+  }, [speciesIndex]);
 
   useEffect(() => {
     switchAudio();
@@ -220,15 +232,6 @@ const BirdSoundGame = ({settings}) => {
       setBirdObservations(data);
     });
   }, [settings.loc, settings.lodId, settings.source]);
-
-  useEffect(() => {
-    if (speciesIndex >= 0 && birdObservations.length > 0) {
-      const record = birdObservations[speciesIndex];
-      fetchAudioRecordings(record['sciName']).then(data => {
-        setAudioJSON(data);
-      });
-    }
-  }, [speciesIndex]);
 
   useEffect(() => {
     switchSpecies();
@@ -289,15 +292,15 @@ return (
                 value={answerType}
                 onChange={setAnswerType}
               >
-                <Radio value="input">直接输入</Radio>
                 <Radio value="select">选项选择</Radio>
+                <Radio value="input">直接输入</Radio>
               </Radio.Group>
             </div>
 
             <Space className="buttons" wrap>
-              <Button size="small" onClick={skipSpecies}>跳过这题</Button>
-              <Button size="small" onClick={switchAudio}>换个录音</Button>
-              <Button size="small" type="dashed" onClick={showTips}>提示</Button>
+              <Button size="small" onClick={skipSpecies}>🏳️ 放弃</Button>
+              <Button size="small" onClick={switchAudio}>🔄 换个录音</Button>
+              <Button size="small" type="dashed" onClick={showTips}>💡 Tips</Button>
             </Space>
 
             <div className="hints">
